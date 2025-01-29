@@ -16,7 +16,7 @@ const openai = new OpenAI({ apiKey: SECRETS.OPENAI_API_KEY });
 async function run() {
   // Write your prompt here
   const prompt =
-    "Generate a web development content, tips and tricks or something new or some rant or some advice as a tweet. It should not be vague and should be unique; under 280 characters and should be plain text. You can use emojis.";
+    "Create content for a male audience, motivating, teasing in the form of a tweet, encouraging them to click through to Onlyfans or Fansly website, followed by the purchase of a subscription to me. It must not be vague and must be unique; must not be 280 characters and must be plain text. You can use emoji.";
 
   const response = await openai.chat.completions.create({
     model: "gpt-4",
