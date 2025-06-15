@@ -1,0 +1,389 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/philip196777/twitter-auto-poster-bot-ai/blob/main/based_roop.ipynb%20(%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%BD%D0%B0%20%D0%BD%D1%81%D1%84%D0%B2)\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "D3L8Lkyj-5gl"
+      },
+      "source": [
+        "#Clone roop repo and install dependencies"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "id": "A4Bae3VP6UsE",
+        "outputId": "28663905-2ebb-462e-ac6c-b9d06b2681dc",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Mounted at /content/gdrive\n"
+          ]
+        }
+      ],
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount('/content/gdrive')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "id": "0aHr4Fo-7IRy",
+        "outputId": "05583fc3-207f-4b4c-86ed-1fb97badcefa",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Cloning into 'roop'...\n",
+            "remote: Enumerating objects: 1296, done.\u001b[K\n",
+            "remote: Total 1296 (delta 0), reused 0 (delta 0), pack-reused 1296 (from 1)\u001b[K\n",
+            "Receiving objects: 100% (1296/1296), 90.64 MiB | 13.97 MiB/s, done.\n",
+            "Resolving deltas: 100% (799/799), done.\n",
+            "/content/roop\n",
+            "Looking in indexes: https://pypi.org/simple, https://download.pytorch.org/whl/cu118\n",
+            "Ignoring onnxruntime: markers 'sys_platform == \"darwin\" and platform_machine != \"arm64\"' don't match your environment\n",
+            "Ignoring onnxruntime-silicon: markers 'sys_platform == \"darwin\" and platform_machine == \"arm64\"' don't match your environment\n",
+            "Ignoring tensorflow: markers 'sys_platform == \"darwin\"' don't match your environment\n",
+            "Collecting numpy==1.23.5 (from -r requirements.txt (line 3))\n",
+            "  Downloading numpy-1.23.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.3 kB)\n",
+            "Collecting opencv-python==4.7.0.72 (from -r requirements.txt (line 4))\n",
+            "  Downloading opencv_python-4.7.0.72-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (18 kB)\n",
+            "Collecting onnx==1.14.0 (from -r requirements.txt (line 5))\n",
+            "  Downloading onnx-1.14.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (15 kB)\n",
+            "Collecting insightface==0.7.3 (from -r requirements.txt (line 6))\n",
+            "  Downloading insightface-0.7.3.tar.gz (439 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m439.5/439.5 kB\u001b[0m \u001b[31m15.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25h  Installing build dependencies ... \u001b[?25l\u001b[?25hdone\n",
+            "  Getting requirements to build wheel ... \u001b[?25l\u001b[?25hdone\n",
+            "  Preparing metadata (pyproject.toml) ... \u001b[?25l\u001b[?25hdone\n",
+            "Requirement already satisfied: psutil==5.9.5 in /usr/local/lib/python3.11/dist-packages (from -r requirements.txt (line 7)) (5.9.5)\n",
+            "Collecting tk==0.1.0 (from -r requirements.txt (line 8))\n",
+            "  Downloading tk-0.1.0-py3-none-any.whl.metadata (693 bytes)\n",
+            "Collecting pillow==9.5.0 (from -r requirements.txt (line 9))\n",
+            "  Downloading Pillow-9.5.0-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (9.5 kB)\n",
+            "Collecting torch==2.0.1+cu118 (from -r requirements.txt (line 10))\n",
+            "  Downloading https://download.pytorch.org/whl/cu118/torch-2.0.1%2Bcu118-cp311-cp311-linux_x86_64.whl (2267.3 MB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m2.3/2.3 GB\u001b[0m \u001b[31m659.5 kB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting onnxruntime-gpu==1.15.0 (from -r requirements.txt (line 13))\n",
+            "  Downloading onnxruntime_gpu-1.15.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (3.9 kB)\n",
+            "Collecting tensorflow==2.12.0 (from -r requirements.txt (line 15))\n",
+            "  Downloading tensorflow-2.12.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (3.4 kB)\n",
+            "Collecting opennsfw2==0.10.2 (from -r requirements.txt (line 16))\n",
+            "  Downloading opennsfw2-0.10.2-py3-none-any.whl.metadata (11 kB)\n",
+            "Collecting protobuf==4.23.2 (from -r requirements.txt (line 17))\n",
+            "  Downloading protobuf-4.23.2-cp37-abi3-manylinux2014_x86_64.whl.metadata (540 bytes)\n",
+            "Collecting tqdm==4.65.0 (from -r requirements.txt (line 18))\n",
+            "  Downloading tqdm-4.65.0-py3-none-any.whl.metadata (56 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m57.0/57.0 kB\u001b[0m \u001b[31m5.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: typing-extensions>=3.6.2.1 in /usr/local/lib/python3.11/dist-packages (from onnx==1.14.0->-r requirements.txt (line 5)) (4.12.2)\n",
+            "Requirement already satisfied: requests in /usr/local/lib/python3.11/dist-packages (from insightface==0.7.3->-r requirements.txt (line 6)) (2.32.3)\n",
+            "Requirement already satisfied: matplotlib in /usr/local/lib/python3.11/dist-packages (from insightface==0.7.3->-r requirements.txt (line 6)) (3.10.0)\n",
+            "Requirement already satisfied: scipy in /usr/local/lib/python3.11/dist-packages (from insightface==0.7.3->-r requirements.txt (line 6)) (1.13.1)\n",
+            "Requirement already satisfied: scikit-learn in /usr/local/lib/python3.11/dist-packages (from insightface==0.7.3->-r requirements.txt (line 6)) (1.6.1)\n",
+            "Requirement already satisfied: scikit-image in /usr/local/lib/python3.11/dist-packages (from insightface==0.7.3->-r requirements.txt (line 6)) (0.25.2)\n",
+            "Requirement already satisfied: easydict in /usr/local/lib/python3.11/dist-packages (from insightface==0.7.3->-r requirements.txt (line 6)) (1.13)\n",
+            "Requirement already satisfied: cython in /usr/local/lib/python3.11/dist-packages (from insightface==0.7.3->-r requirements.txt (line 6)) (3.0.12)\n",
+            "Requirement already satisfied: albumentations in /usr/local/lib/python3.11/dist-packages (from insightface==0.7.3->-r requirements.txt (line 6)) (2.0.5)\n",
+            "Requirement already satisfied: prettytable in /usr/local/lib/python3.11/dist-packages (from insightface==0.7.3->-r requirements.txt (line 6)) (3.15.1)\n",
+            "Requirement already satisfied: filelock in /usr/local/lib/python3.11/dist-packages (from torch==2.0.1+cu118->-r requirements.txt (line 10)) (3.17.0)\n",
+            "Requirement already satisfied: sympy in /usr/local/lib/python3.11/dist-packages (from torch==2.0.1+cu118->-r requirements.txt (line 10)) (1.13.1)\n",
+            "Requirement already satisfied: networkx in /usr/local/lib/python3.11/dist-packages (from torch==2.0.1+cu118->-r requirements.txt (line 10)) (3.4.2)\n",
+            "Requirement already satisfied: jinja2 in /usr/local/lib/python3.11/dist-packages (from torch==2.0.1+cu118->-r requirements.txt (line 10)) (3.1.5)\n",
+            "Collecting triton==2.0.0 (from torch==2.0.1+cu118->-r requirements.txt (line 10))\n",
+            "  Downloading https://download.pytorch.org/whl/triton-2.0.0-1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (63.3 MB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m63.3/63.3 MB\u001b[0m \u001b[31m12.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting coloredlogs (from onnxruntime-gpu==1.15.0->-r requirements.txt (line 13))\n",
+            "  Downloading coloredlogs-15.0.1-py2.py3-none-any.whl.metadata (12 kB)\n",
+            "Requirement already satisfied: flatbuffers in /usr/local/lib/python3.11/dist-packages (from onnxruntime-gpu==1.15.0->-r requirements.txt (line 13)) (25.2.10)\n",
+            "INFO: pip is looking at multiple versions of onnxruntime-gpu to determine which version is compatible with other requirements. This could take a while.\n",
+            "\u001b[31mERROR: Cannot install -r requirements.txt (line 13), -r requirements.txt (line 4), -r requirements.txt (line 5), -r requirements.txt (line 6) and numpy==1.23.5 because these package versions have conflicting dependencies.\u001b[0m\u001b[31m\n",
+            "\u001b[0m\n",
+            "The conflict is caused by:\n",
+            "    The user requested numpy==1.23.5\n",
+            "    opencv-python 4.7.0.72 depends on numpy>=1.21.2; python_version >= \"3.10\"\n",
+            "    opencv-python 4.7.0.72 depends on numpy>=1.22.0; python_version >= \"3.11\"\n",
+            "    opencv-python 4.7.0.72 depends on numpy>=1.17.0; python_version >= \"3.7\"\n",
+            "    opencv-python 4.7.0.72 depends on numpy>=1.17.3; python_version >= \"3.8\"\n",
+            "    opencv-python 4.7.0.72 depends on numpy>=1.19.3; python_version >= \"3.9\"\n",
+            "    onnx 1.14.0 depends on numpy\n",
+            "    insightface 0.7.3 depends on numpy\n",
+            "    onnxruntime-gpu 1.15.0 depends on numpy>=1.24.2\n",
+            "\n",
+            "To fix this you could try to:\n",
+            "1. loosen the range of package versions you've specified\n",
+            "2. remove package versions to allow pip to attempt to solve the dependency conflict\n",
+            "\n",
+            "\u001b[31mERROR: ResolutionImpossible: for help visit https://pip.pypa.io/en/latest/topics/dependency-resolution/#dealing-with-dependency-conflicts\u001b[0m\u001b[31m\n",
+            "\u001b[0m"
+          ]
+        }
+      ],
+      "source": [
+        "!git clone https://github.com/devIndustrial/roop\n",
+        "%cd roop\n",
+        "!pip install -r requirements.txt"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "jl9zIFZYGWTQ"
+      },
+      "source": [
+        "#download model"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 3,
+      "metadata": {
+        "id": "UQH2exUYGTbK",
+        "outputId": "3783ee5b-7258-4e71-abb5-a552c9fb464b",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "--2025-06-15 11:10:22--  https://civitai.com/api/download/models/85159\n",
+            "Resolving civitai.com (civitai.com)... 104.22.18.237, 104.22.19.237, 172.67.12.143, ...\n",
+            "Connecting to civitai.com (civitai.com)|104.22.18.237|:443... connected.\n",
+            "HTTP request sent, awaiting response... 307 Temporary Redirect\n",
+            "Location: https://civitai-delivery-worker-prod.5ac0637cfd0766c97916cefa3764fbdf.r2.cloudflarestorage.com/1/model/inswapper128.lhhH.onnx?X-Amz-Expires=86400&response-content-disposition=attachment%3B%20filename%3D%22roopVideoFace_v10.onnx%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=e01358d793ad6966166af8b3064953ad/20250615/us-east-1/s3/aws4_request&X-Amz-Date=20250615T111022Z&X-Amz-SignedHeaders=host&X-Amz-Signature=bd3cca3e81505145e79fa9cce7e62c0390648a94e99cdf2259fa1424a16a4d5d [following]\n",
+            "--2025-06-15 11:10:22--  https://civitai-delivery-worker-prod.5ac0637cfd0766c97916cefa3764fbdf.r2.cloudflarestorage.com/1/model/inswapper128.lhhH.onnx?X-Amz-Expires=86400&response-content-disposition=attachment%3B%20filename%3D%22roopVideoFace_v10.onnx%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=e01358d793ad6966166af8b3064953ad/20250615/us-east-1/s3/aws4_request&X-Amz-Date=20250615T111022Z&X-Amz-SignedHeaders=host&X-Amz-Signature=bd3cca3e81505145e79fa9cce7e62c0390648a94e99cdf2259fa1424a16a4d5d\n",
+            "Resolving civitai-delivery-worker-prod.5ac0637cfd0766c97916cefa3764fbdf.r2.cloudflarestorage.com (civitai-delivery-worker-prod.5ac0637cfd0766c97916cefa3764fbdf.r2.cloudflarestorage.com)... 172.66.1.46, 162.159.141.50, 2a06:98c1:58::12e, ...\n",
+            "Connecting to civitai-delivery-worker-prod.5ac0637cfd0766c97916cefa3764fbdf.r2.cloudflarestorage.com (civitai-delivery-worker-prod.5ac0637cfd0766c97916cefa3764fbdf.r2.cloudflarestorage.com)|172.66.1.46|:443... connected.\n",
+            "HTTP request sent, awaiting response... 200 OK\n",
+            "Length: 554253681 (529M) [application/octet-stream]\n",
+            "Saving to: ‘inswapper_128.onnx’\n",
+            "\n",
+            "inswapper_128.onnx  100%[===================>] 528.58M  72.6MB/s    in 6.7s    \n",
+            "\n",
+            "2025-06-15 11:10:29 (79.3 MB/s) - ‘inswapper_128.onnx’ saved [554253681/554253681]\n",
+            "\n"
+          ]
+        }
+      ],
+      "source": [
+        "!wget https://civitai.com/api/download/models/85159 -O inswapper_128.onnx"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install onnxruntime\n"
+      ],
+      "metadata": {
+        "id": "7dNpvASbS4bC",
+        "outputId": "1105ddce-2bb8-47c7-d3d9-e3b86e51ce97",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting onnxruntime\n",
+            "  Downloading onnxruntime-1.22.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (4.5 kB)\n",
+            "Collecting coloredlogs (from onnxruntime)\n",
+            "  Using cached coloredlogs-15.0.1-py2.py3-none-any.whl.metadata (12 kB)\n",
+            "Requirement already satisfied: flatbuffers in /usr/local/lib/python3.11/dist-packages (from onnxruntime) (25.2.10)\n",
+            "Requirement already satisfied: numpy>=1.21.6 in /usr/local/lib/python3.11/dist-packages (from onnxruntime) (1.26.4)\n",
+            "Requirement already satisfied: packaging in /usr/local/lib/python3.11/dist-packages (from onnxruntime) (24.2)\n",
+            "Requirement already satisfied: protobuf in /usr/local/lib/python3.11/dist-packages (from onnxruntime) (4.25.6)\n",
+            "Requirement already satisfied: sympy in /usr/local/lib/python3.11/dist-packages (from onnxruntime) (1.13.1)\n",
+            "Collecting humanfriendly>=9.1 (from coloredlogs->onnxruntime)\n",
+            "  Downloading humanfriendly-10.0-py2.py3-none-any.whl.metadata (9.2 kB)\n",
+            "Requirement already satisfied: mpmath<1.4,>=1.1.0 in /usr/local/lib/python3.11/dist-packages (from sympy->onnxruntime) (1.3.0)\n",
+            "Downloading onnxruntime-1.22.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.4 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m16.4/16.4 MB\u001b[0m \u001b[31m117.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading coloredlogs-15.0.1-py2.py3-none-any.whl (46 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m46.0/46.0 kB\u001b[0m \u001b[31m4.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading humanfriendly-10.0-py2.py3-none-any.whl (86 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m86.8/86.8 kB\u001b[0m \u001b[31m5.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hInstalling collected packages: humanfriendly, coloredlogs, onnxruntime\n",
+            "Successfully installed coloredlogs-15.0.1 humanfriendly-10.0 onnxruntime-1.22.0\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install insightface\n"
+      ],
+      "metadata": {
+        "id": "1UQGuz7sTImy",
+        "outputId": "1320b29c-25ef-4457-d963-78764c33ed77",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting insightface\n",
+            "  Using cached insightface-0.7.3.tar.gz (439 kB)\n",
+            "  Installing build dependencies ... \u001b[?25l\u001b[?25hdone\n",
+            "  Getting requirements to build wheel ... \u001b[?25l\u001b[?25hdone\n",
+            "  Preparing metadata (pyproject.toml) ... \u001b[?25l\u001b[?25hdone\n",
+            "Requirement already satisfied: numpy in /usr/local/lib/python3.11/dist-packages (from insightface) (1.26.4)\n",
+            "Collecting onnx (from insightface)\n",
+            "  Downloading onnx-1.18.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.9 kB)\n",
+            "Requirement already satisfied: tqdm in /usr/local/lib/python3.11/dist-packages (from insightface) (4.67.1)\n",
+            "Requirement already satisfied: requests in /usr/local/lib/python3.11/dist-packages (from insightface) (2.32.3)\n",
+            "Requirement already satisfied: matplotlib in /usr/local/lib/python3.11/dist-packages (from insightface) (3.10.0)\n",
+            "Requirement already satisfied: Pillow in /usr/local/lib/python3.11/dist-packages (from insightface) (11.1.0)\n",
+            "Requirement already satisfied: scipy in /usr/local/lib/python3.11/dist-packages (from insightface) (1.13.1)\n",
+            "Requirement already satisfied: scikit-learn in /usr/local/lib/python3.11/dist-packages (from insightface) (1.6.1)\n",
+            "Requirement already satisfied: scikit-image in /usr/local/lib/python3.11/dist-packages (from insightface) (0.25.2)\n",
+            "Requirement already satisfied: easydict in /usr/local/lib/python3.11/dist-packages (from insightface) (1.13)\n",
+            "Requirement already satisfied: cython in /usr/local/lib/python3.11/dist-packages (from insightface) (3.0.12)\n",
+            "Requirement already satisfied: albumentations in /usr/local/lib/python3.11/dist-packages (from insightface) (2.0.5)\n",
+            "Requirement already satisfied: prettytable in /usr/local/lib/python3.11/dist-packages (from insightface) (3.15.1)\n",
+            "Requirement already satisfied: PyYAML in /usr/local/lib/python3.11/dist-packages (from albumentations->insightface) (6.0.2)\n",
+            "Requirement already satisfied: pydantic>=2.9.2 in /usr/local/lib/python3.11/dist-packages (from albumentations->insightface) (2.10.6)\n",
+            "Requirement already satisfied: albucore==0.0.23 in /usr/local/lib/python3.11/dist-packages (from albumentations->insightface) (0.0.23)\n",
+            "Requirement already satisfied: opencv-python-headless>=4.9.0.80 in /usr/local/lib/python3.11/dist-packages (from albumentations->insightface) (4.11.0.86)\n",
+            "Requirement already satisfied: stringzilla>=3.10.4 in /usr/local/lib/python3.11/dist-packages (from albucore==0.0.23->albumentations->insightface) (3.12.2)\n",
+            "Requirement already satisfied: simsimd>=5.9.2 in /usr/local/lib/python3.11/dist-packages (from albucore==0.0.23->albumentations->insightface) (6.2.1)\n",
+            "Requirement already satisfied: contourpy>=1.0.1 in /usr/local/lib/python3.11/dist-packages (from matplotlib->insightface) (1.3.1)\n",
+            "Requirement already satisfied: cycler>=0.10 in /usr/local/lib/python3.11/dist-packages (from matplotlib->insightface) (0.12.1)\n",
+            "Requirement already satisfied: fonttools>=4.22.0 in /usr/local/lib/python3.11/dist-packages (from matplotlib->insightface) (4.56.0)\n",
+            "Requirement already satisfied: kiwisolver>=1.3.1 in /usr/local/lib/python3.11/dist-packages (from matplotlib->insightface) (1.4.8)\n",
+            "Requirement already satisfied: packaging>=20.0 in /usr/local/lib/python3.11/dist-packages (from matplotlib->insightface) (24.2)\n",
+            "Requirement already satisfied: pyparsing>=2.3.1 in /usr/local/lib/python3.11/dist-packages (from matplotlib->insightface) (3.2.1)\n",
+            "Requirement already satisfied: python-dateutil>=2.7 in /usr/local/lib/python3.11/dist-packages (from matplotlib->insightface) (2.8.2)\n",
+            "Requirement already satisfied: protobuf>=4.25.1 in /usr/local/lib/python3.11/dist-packages (from onnx->insightface) (4.25.6)\n",
+            "Requirement already satisfied: typing_extensions>=4.7.1 in /usr/local/lib/python3.11/dist-packages (from onnx->insightface) (4.12.2)\n",
+            "Requirement already satisfied: wcwidth in /usr/local/lib/python3.11/dist-packages (from prettytable->insightface) (0.2.13)\n",
+            "Requirement already satisfied: charset-normalizer<4,>=2 in /usr/local/lib/python3.11/dist-packages (from requests->insightface) (3.4.1)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.11/dist-packages (from requests->insightface) (3.10)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.11/dist-packages (from requests->insightface) (2.3.0)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.11/dist-packages (from requests->insightface) (2025.1.31)\n",
+            "Requirement already satisfied: networkx>=3.0 in /usr/local/lib/python3.11/dist-packages (from scikit-image->insightface) (3.4.2)\n",
+            "Requirement already satisfied: imageio!=2.35.0,>=2.33 in /usr/local/lib/python3.11/dist-packages (from scikit-image->insightface) (2.37.0)\n",
+            "Requirement already satisfied: tifffile>=2022.8.12 in /usr/local/lib/python3.11/dist-packages (from scikit-image->insightface) (2025.2.18)\n",
+            "Requirement already satisfied: lazy-loader>=0.4 in /usr/local/lib/python3.11/dist-packages (from scikit-image->insightface) (0.4)\n",
+            "Requirement already satisfied: joblib>=1.2.0 in /usr/local/lib/python3.11/dist-packages (from scikit-learn->insightface) (1.4.2)\n",
+            "Requirement already satisfied: threadpoolctl>=3.1.0 in /usr/local/lib/python3.11/dist-packages (from scikit-learn->insightface) (3.5.0)\n",
+            "Requirement already satisfied: annotated-types>=0.6.0 in /usr/local/lib/python3.11/dist-packages (from pydantic>=2.9.2->albumentations->insightface) (0.7.0)\n",
+            "Requirement already satisfied: pydantic-core==2.27.2 in /usr/local/lib/python3.11/dist-packages (from pydantic>=2.9.2->albumentations->insightface) (2.27.2)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil>=2.7->matplotlib->insightface) (1.17.0)\n",
+            "Downloading onnx-1.18.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (17.6 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m17.6/17.6 MB\u001b[0m \u001b[31m81.6 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hBuilding wheels for collected packages: insightface\n",
+            "  Building wheel for insightface (pyproject.toml) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for insightface: filename=insightface-0.7.3-cp311-cp311-linux_x86_64.whl size=1060442 sha256=f06eef93ea40dc0af14716bc294ce675e9785ffc347c44bb35df2297e20ed084\n",
+            "  Stored in directory: /root/.cache/pip/wheels/27/d8/22/f52d858d16cd06e7b2e6aad34a1777dcfaf000be833bbf8146\n",
+            "Successfully built insightface\n",
+            "Installing collected packages: onnx, insightface\n",
+            "Successfully installed insightface-0.7.3 onnx-1.18.0\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!python run.py -f /content/49.jpg -t \"/content/1 Adrianna Eves.mp4\" -o /content/gdrive/MyDrive/output.mp4\n"
+      ],
+      "metadata": {
+        "id": "OrPL47PFT11K",
+        "outputId": "f83c6ac9-b4b1-4413-bc04-5dbe14572224",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "2025-06-15 11:17:59.187039: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered\n",
+            "WARNING: All log messages before absl::InitializeLog() is called are written to STDERR\n",
+            "E0000 00:00:1749986279.219430    3439 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered\n",
+            "E0000 00:00:1749986279.231832    3439 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered\n",
+            "2025-06-15 11:17:59.265943: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.\n",
+            "To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.\n",
+            "/usr/local/lib/python3.11/dist-packages/albumentations/__init__.py:28: UserWarning: A new version of Albumentations is available: '2.0.8' (you have '2.0.5'). Upgrade using: pip install -U albumentations. To disable automatic update checks, set the environment variable NO_ALBUMENTATIONS_UPDATE to 1.\n",
+            "  check_for_updates()\n",
+            "download_path: /root/.insightface/models/buffalo_l\n",
+            "Downloading /root/.insightface/models/buffalo_l.zip from https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip...\n",
+            "100% 281857/281857 [00:02<00:00, 104930.16KB/s]\n",
+            "Applied providers: ['CPUExecutionProvider'], with options: {'CPUExecutionProvider': {}}\n",
+            "find model: /root/.insightface/models/buffalo_l/1k3d68.onnx landmark_3d_68 ['None', 3, 192, 192] 0.0 1.0\n",
+            "Applied providers: ['CPUExecutionProvider'], with options: {'CPUExecutionProvider': {}}\n",
+            "find model: /root/.insightface/models/buffalo_l/2d106det.onnx landmark_2d_106 ['None', 3, 192, 192] 0.0 1.0\n",
+            "Applied providers: ['CPUExecutionProvider'], with options: {'CPUExecutionProvider': {}}\n",
+            "find model: /root/.insightface/models/buffalo_l/det_10g.onnx detection [1, 3, '?', '?'] 127.5 128.0\n",
+            "Applied providers: ['CPUExecutionProvider'], with options: {'CPUExecutionProvider': {}}\n",
+            "find model: /root/.insightface/models/buffalo_l/genderage.onnx genderage ['None', 3, 96, 96] 0.0 1.0\n",
+            "Applied providers: ['CPUExecutionProvider'], with options: {'CPUExecutionProvider': {}}\n",
+            "find model: /root/.insightface/models/buffalo_l/w600k_r50.onnx recognition ['None', 3, 112, 112] 127.5 127.5\n",
+            "set det-size: (640, 640)\n",
+            "/usr/local/lib/python3.11/dist-packages/insightface/utils/transform.py:68: FutureWarning: `rcond` parameter will change to the default of machine precision times ``max(M, N)`` where M and N are the input matrix dimensions.\n",
+            "To use the future default and silence this warning we advise to pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.\n",
+            "  P = np.linalg.lstsq(X_homo, Y)[0].T # Affine matrix. 3 x 4\n",
+            "Status: detecting video's FPS...\n",
+            "Status: extracting frames...\n",
+            "Status: swapping in progress...\n",
+            "Processing:  13% 25/186 [00:11<01:22,  1.96frame/s]Applied providers: ['CPUExecutionProvider'], with options: {'CPUExecutionProvider': {}}\n",
+            "inswapper-shape: [1, 3, 128, 128]\n",
+            "Processing:  17% 32/186 [00:45<10:42,  4.17s/frame]"
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "accelerator": "GPU",
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
